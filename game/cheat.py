@@ -1,3 +1,5 @@
+# not finished, this file doesn't currently work. But, I am making a cheat for the game.
+
 import cv2
 import numpy as np
 import pyautogui
