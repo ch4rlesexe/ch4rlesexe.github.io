@@ -1,0 +1,227 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    background-color: #111;
+    color: #eee;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1; 
+}
+
+nav {
+    background: #222;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #0f9d58;
+}
+
+nav h1 a {
+    color: #0f9d58;
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li a {
+    color: #eee;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+nav ul li:first-child a {
+    font-weight: bold;
+    color: #0f9d58;
+}
+
+nav ul li a:hover {
+    background-color: #0f9d58;
+    color: #111;
+}
+
+#hero {
+    background: linear-gradient(145deg, #1a1a1a, #111);
+    padding: 3rem;
+    text-align: center;
+    border-bottom: 2px solid #333;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    color: #0f9d58;
+}
+
+.hero-content p {
+    margin-top: 0.5rem;
+    color: #aaa;
+}
+
+.section {
+    padding: 4rem 2rem;
+}
+
+.section-box {
+    background: #333;
+    padding: 2rem 3rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    margin: auto;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+    background-color: #0f9d58;
+    color: #111;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0d8a50;
+}
+
+.clock {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #222;
+    color: #0f9d58;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: 1px solid #0f9d58;
+}
+
+footer {
+    background: #222;
+    padding: 1rem;
+    text-align: center;
+    border-top: 2px solid #0f9d58;
+}
+
+.interests-table {
+    width: 100%;
+    margin-top: 2rem;
+    border-collapse: collapse;
+}
+
+.interests-table th, .interests-table td {
+    padding: 1rem;
+    text-align: left;
+    color: #eee;
+    vertical-align: top;
+    border: 1px solid #444;
+}
+
+.interests-table th {
+    background: #222;
+    color: #0f9d58;
+    font-weight: bold;
+}
+
+.interests-table td {
+    background: #444;
+}
+
+.interests-table tr:nth-child(even) td {
+    background: #3b3b3b;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+}
+
+.disclaimer-box {
+    background-color: #222;
+    border: 1px solid #0f9d58;
+    color: #ccc;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.projects-table {
+    width: 100%;
+    margin-top: 2rem;
+    border-collapse: collapse;
+}
+
+.projects-table th, .projects-table td {
+    padding: 1rem;
+    text-align: left;
+    color: #eee;
+    vertical-align: top;
+    border: 1px solid #444;
+}
+
+.projects-table th {
+    background: #222;
+    color: #0f9d58;
+    font-weight: bold;
+}
+
+.projects-table td {
+    background: #444;
+    line-height: 1.6;
+}
+
+.projects-table tr:nth-child(even) td {
+    background: #3b3b3b;
+}
+
+.game-icon {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 2rem;
+    color: #0f9d58;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.game-icon:hover {
+    color: #0d8a50;
+    transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
