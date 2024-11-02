@@ -84,6 +84,23 @@
     height: 18px;
     cursor: pointer;
   }
+
+  .back-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 0.8rem 1.5rem;
+    background-color: #0f9d58;
+    color: #111;
+    font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .back-button:hover {
+    background-color: #0d8a50;
+  }
 </style>
 </head>
 <body>
@@ -95,7 +112,6 @@
   <p>Score 50 points to win! Once you reach 40 points, your bucket speed increases.</p>
 </div>
 
-<!-- Instance stats section -->
 <div id="instance-stats">
   <br><br/>  <br><br/>  <br><br/>  <br><br/>
   <h4>In Instance:</h4>
@@ -109,11 +125,12 @@
 <div id="game-win">You Win!<br>Click or Press Any Key to Restart</div>
 <canvas id="gameCanvas" width="400" height="600"></canvas>
 
-<!-- No Lose Mode Checkbox -->
 <div class="checkbox-container">
   <label for="noLoseToggle">No Lose Mode</label>
   <input type="checkbox" id="noLoseToggle">
 </div>
+
+<a href="../index.html" class="back-button">Back to Portfolio</a>
 
 <script>
   const canvas = document.getElementById("gameCanvas");
@@ -167,7 +184,7 @@
     }
 
     // increase bucket speed when score hits 40
-    if (score === 40) { // suuuuper strict ===
+    if (score === 40) { 
       bucketSpeed += 1; 
     }
 
