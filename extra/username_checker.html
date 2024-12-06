@@ -3,109 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Username Availability Checker</title>
+    <title>Minecraft Username Checker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
         }
-        textarea, button, table {
-            margin: 20px auto;
-            display: block;
+        textarea, input {
+            margin: 10px;
+            padding: 10px;
+            width: 300px;
         }
         table {
-            width: 60%;
-            border-collapse: collapse;
             margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
         }
         th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
+            padding: 10px;
+            text-align: center;
         }
         th {
             background-color: #f4f4f4;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <h1>Minecraft Username Availability Checker</h1>
-    <textarea id="usernameInput" rows="10" cols="50" placeholder="Enter usernames, one per line"></textarea>
-    <button id="checkButton">Check Usernames</button>
-    <table id="resultTable" hidden>
+    <h1>Minecraft Username Checker</h1>
+    <textarea id="usernames" rows="10" placeholder="Enter usernames (one per line)"></textarea><br>
+    <button id="checkUsernames">Check Availability</button>
+    <table id="resultsTable" style="display: none;">
         <thead>
             <tr>
                 <th>Username</th>
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody id="resultBody"></tbody>
+        <tbody></tbody>
     </table>
-
     <script>
-        document.getElementById("checkButton").addEventListener("click", async function () {
-            const usernames = document.getElementById("usernameInput").value
-                .split("\n")
-                .map(u => u.trim())
-                .filter(u => u);
+        document.getElementById('checkUsernames').addEventListener('click', async () => {
+            const usernames = document.getElementById('usernames').value.split('\n')
+                .map(name => name.trim().toLowerCase())
+                .filter(name => name); 
 
-            const resultTable = document.getElementById("resultTable");
-            const resultBody = document.getElementById("resultBody");
+            const resultsTable = document.getElementById('resultsTable');
+            const resultsBody = resultsTable.querySelector('tbody');
+            resultsBody.innerHTML = ''; 
 
-            resultBody.innerHTML = ""; 
-            resultTable.hidden = true; 
-
-            for (const username of usernames) {
-                const row = document.createElement("tr");
-                const usernameCell = document.createElement("td");
-                const statusCell = document.createElement("td");
-
-                usernameCell.textContent = username; 
-
-                try {
-                    console.log(`Fetching: https://minecraft-render-proxy.onrender.com/check/${username}`);
-
-                    const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}`, { mode: 'no-cors' });
-
-                    if (!response.ok) {
-                        console.error(`HTTP Error: ${response.status}`, await response.text());
-                        throw new Error(`HTTP Error: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    console.log(`Response for ${username}:`, data);
-
-                    usernameCell.textContent = data.username || username;
-
-                    if (data.status === "Claimed") {
-                        statusCell.textContent = "Claimed";
-                        statusCell.style.color = "red";
-                    } else if (data.status === "Unclaimed") {
-                        statusCell.textContent = "Unclaimed";
-                        statusCell.style.color = "green";
-                    } else {
-                        statusCell.textContent = data.status || "Unknown Error";
-                        statusCell.style.color = "orange";
-                    }
-                } catch (error) {
-                    console.error(`Error for ${username}:`, error);
-                    statusCell.textContent = "Network Error (Check Console)";
-                    statusCell.style.color = "orange";
-                }
-
-                row.appendChild(usernameCell);
-                row.appendChild(statusCell);
-                resultBody.appendChild(row);
+            if (usernames.length === 0) {
+                alert('Please enter at least one username.');
+                return;
             }
 
-            resultTable.hidden = false;
+            resultsTable.style.display = 'none'; 
+            for (const username of usernames) {
+                try {
+                    const response = await fetch('https://minecraft-render-proxy.onrender.com/check/username', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username })
+                    });
+
+                    const data = await response.json();
+                    const row = document.createElement('tr');
+                    const displayName = data.username || username; 
+                    const status = data.status || 'Error';
+
+                    row.innerHTML = `
+                        <td>${displayName}</td>
+                        <td>${status}</td>
+                    `;
+
+                    resultsBody.appendChild(row);
+                } catch (error) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${username}</td>
+                        <td>Error</td>
+                    `;
+                    resultsBody.appendChild(row);
+                }
+            }
+
+            resultsTable.style.display = 'table'; 
         });
     </script>
 </body>
