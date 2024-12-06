@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Username Checker</title>
+    <title>Minecraft Username Availability Checker</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -108,8 +108,8 @@
     </style>
 </head>
 <body>
-    <h1>Minecraft Username Checker</h1>
-    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. Also, some words may be banned by Mojang, and aren't fully accounted for here. You can also try searching fewer usernames at the same time.</p>
+    <h1>Minecraft Username Availability Checker</h1>
+    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. You can also try searching fewer usernames at the same time. Also, some words may be banned by Mojang, and aren't fully accounted for here.</p>
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
     <button id="copyButton" onclick="copyAvailableUsernames()">Copy Available Usernames</button>
@@ -141,8 +141,21 @@ async function fetchBannedWords() {
     }
 }
 
+async function fetchBannedMojangNames() {
+    try {
+        const response = await fetch('https://example.com/banned-mojang-usernames.txt'); // Replace with actual Mojang banned list URL
+        if (!response.ok) throw new Error("Failed to fetch Mojang banned usernames.");
+        const text = await response.text();
+        return text.split('\n').map(name => name.trim().toLowerCase());
+    } catch (error) {
+        console.error("Error fetching Mojang banned usernames:", error);
+        return [];
+    }
+}
+
 async function checkUsernames() {
     const bannedWords = await fetchBannedWords();
+    const bannedMojangNames = await fetchBannedMojangNames();
 
     const usernames = document.getElementById("usernames").value.split("\n")
         .map(name => name.trim())
@@ -174,6 +187,9 @@ async function checkUsernames() {
         }
         if (bannedWords.includes(username.toLowerCase())) {
             reasons.push("Username contains banned words.");
+        }
+        if (bannedMojangNames.includes(username.toLowerCase())) {
+            reasons.push("Username is a banned Mojang username.");
         }
         if (reasons.length > 0) {
             username.invalidReasons = reasons;
