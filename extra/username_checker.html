@@ -52,14 +52,14 @@
         document.getElementById("checkButton").addEventListener("click", async function () {
             const usernames = document.getElementById("usernameInput").value
                 .split("\n")
-                .map(u => u.trim().toLowerCase())
-                .filter(u => u); 
+                .map(u => u.trim())
+                .filter(u => u);
 
             const resultTable = document.getElementById("resultTable");
             const resultBody = document.getElementById("resultBody");
 
-            resultBody.innerHTML = "";
-            resultTable.hidden = true;
+            resultBody.innerHTML = ""; 
+            resultTable.hidden = true; 
 
             for (const username of usernames) {
                 const row = document.createElement("tr");
