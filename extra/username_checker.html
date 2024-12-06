@@ -56,7 +56,7 @@
             background-color: #c0392b;
         }
 
-        #copyButton {
+        #copyButton, #removeAvailableButton, #removeUnavailableButton {
             display: none;
         }
 
@@ -113,6 +113,8 @@
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
     <button id="copyButton" onclick="copyAvailableUsernames()">Copy Available Usernames</button>
+    <button id="removeAvailableButton" onclick="removeAvailableUsernames()">Remove Available Usernames</button>
+    <button id="removeUnavailableButton" onclick="removeUnavailableUsernames()">Remove Unavailable Usernames</button>
     <div class="loading" id="loadingIndicator">
         <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="50">
         <p>Loading...</p>
@@ -141,55 +143,14 @@ async function fetchBannedWords() {
     }
 }
 
-async function fetchBannedMojangNames() {
-    try {
-        const response = await fetch('https://example.com/banned-mojang-usernames.txt'); // Replace with actual Mojang banned list URL
-        if (!response.ok) throw new Error("Failed to fetch Mojang banned usernames.");
-        const text = await response.text();
-        return text.split('\n').map(name => name.trim().toLowerCase());
-    } catch (error) {
-        console.error("Error fetching Mojang banned usernames:", error);
-        return [];
-    }
-}
-
-async function checkUsernames() {
-    const bannedWords = await fetchBannedWords();
-    const bannedMojangNames = await fetchBannedMojangNames();
-
-    const usernames = document.getElementById("usernames").value.split("\n")
-        .map(name => name.trim())
-        .filter(name => name);
-
-    const resultsTable = document.getElementById("resultsTable");
-    const resultsBody = resultsTable.querySelector("tbody");
-    const loadingIndicator = document.getElementById("loadingIndicator");
-    const copyButton = document.getElementById("copyButton");
-
-    resultsBody.innerHTML = ""; 
-    copyButton.style.display = "none"; 
-    resultsTable.style.display = "none";
-    loadingIndicator.style.display = "block"; 
-
-    if (usernames.length === 0) {
-        alert("Please enter at least one username.");
-        loadingIndicator.style.display = "none"; 
-        return;
-    }
-
+function validateUsernames(usernames) {
     const invalidUsernames = usernames.filter(username => {
         const reasons = [];
         if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-            reasons.push("Username can only contain letters, numbers, and underscores.");
+            reasons.push("Only letters, numbers, and underscores are allowed.");
         }
         if (username.length < 3 || username.length > 16) {
-            reasons.push("Username must be between 3 and 16 characters long.");
-        }
-        if (bannedWords.includes(username.toLowerCase())) {
-            reasons.push("Username contains banned words.");
-        }
-        if (bannedMojangNames.includes(username.toLowerCase())) {
-            reasons.push("Username is a banned Mojang username.");
+            reasons.push("Must be between 3 and 16 characters.");
         }
         if (reasons.length > 0) {
             username.invalidReasons = reasons;
@@ -203,11 +164,34 @@ async function checkUsernames() {
             return `${username}:\n- ${username.invalidReasons.join("\n- ")}\n`;
         }).join("\n");
         alert(`The following usernames are invalid:\n\n${message}`);
-        loadingIndicator.style.display = "none"; 
+        return false;
+    }
+    return true;
+}
+
+async function checkUsernames() {
+    const usernames = document.getElementById("usernames").value.split("\n").map(name => name.trim()).filter(name => name);
+
+    if (!validateUsernames(usernames)) {
         return;
     }
 
+    const resultsTable = document.getElementById("resultsTable");
+    const resultsBody = resultsTable.querySelector("tbody");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const copyButton = document.getElementById("copyButton");
+    const removeAvailableButton = document.getElementById("removeAvailableButton");
+    const removeUnavailableButton = document.getElementById("removeUnavailableButton");
+
+    resultsBody.innerHTML = ""; 
+    copyButton.style.display = "none";
+    removeAvailableButton.style.display = "none";
+    removeUnavailableButton.style.display = "none";
+    resultsTable.style.display = "none";
+    loadingIndicator.style.display = "block"; 
+
     const availableUsernames = [];
+    const unavailableUsernames = [];
 
     for (const username of usernames) {
         const row = document.createElement("tr");
@@ -234,12 +218,12 @@ async function checkUsernames() {
             } else if (data.status === "Claimed") {
                 statusCell.textContent = "❌ Taken";
                 statusCell.className = "unavailable";
+                unavailableUsernames.push(displayName);
             } else {
                 statusCell.textContent = `Error: ${data.status}`;
                 statusCell.className = "error";
             }
 
-            await new Promise(resolve => setTimeout(resolve, 300));
         } catch (error) {
             console.error(`Error for username "${username}":`, error);
             const statusCell = row.querySelector("td:nth-child(2)");
@@ -249,11 +233,18 @@ async function checkUsernames() {
     }
 
     resultsTable.style.display = "table";
-    loadingIndicator.style.display = "none"; 
+    loadingIndicator.style.display = "none";
 
     if (availableUsernames.length > 0) {
         copyButton.style.display = "block"; 
         copyButton.availableUsernames = availableUsernames;
+        removeAvailableButton.style.display = "block";
+        removeAvailableButton.availableUsernames = availableUsernames;
+    }
+
+    if (unavailableUsernames.length > 0) {
+        removeUnavailableButton.style.display = "block";
+        removeUnavailableButton.unavailableUsernames = unavailableUsernames;
     }
 }
 
@@ -267,6 +258,20 @@ function copyAvailableUsernames() {
     navigator.clipboard.writeText(availableUsernames.join("\n"))
         .then(() => alert("Available usernames copied to clipboard!"))
         .catch(err => console.error("Failed to copy usernames:", err));
+}
+
+function removeAvailableUsernames() {
+    const availableUsernames = document.getElementById("removeAvailableButton").availableUsernames || [];
+    const usernames = document.getElementById("usernames").value.split("\n").map(name => name.trim());
+    const filteredUsernames = usernames.filter(name => !availableUsernames.includes(name));
+    document.getElementById("usernames").value = filteredUsernames.join("\n");
+}
+
+function removeUnavailableUsernames() {
+    const unavailableUsernames = document.getElementById("removeUnavailableButton").unavailableUsernames || [];
+    const usernames = document.getElementById("usernames").value.split("\n").map(name => name.trim());
+    const filteredUsernames = usernames.filter(name => !unavailableUsernames.includes(name));
+    document.getElementById("usernames").value = filteredUsernames.join("\n");
 }
     </script>
 </body>
