@@ -104,7 +104,7 @@
 </head>
 <body>
     <h1>Minecraft Username Checker</h1>
-    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. Also, some words may be banned by Mojang, and aren't fully accounted for here. You can also try searching less usernames at the same time.</p>
+    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. Also, some words may be banned by Mojang, and aren't fully accounted for here. You can also try searching fewer usernames at the same time.</p>
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
     <table id="resultsTable" style="display: none;">
@@ -116,7 +116,7 @@
         </thead>
         <tbody></tbody>
     </table>
-    <footer>Powered by ch4rlesexe - https://https://github.com/ch4rlesexe/</footer>
+    <footer>Powered by ch4rlesexe - https://github.com/ch4rlesexe/</footer>
 
     <script>
 async function fetchBannedWords() {
@@ -148,14 +148,25 @@ async function checkUsernames() {
     }
 
     const invalidUsernames = usernames.filter(username => {
-        return (
-            !/^[a-zA-Z0-9_]{3,16}$/.test(username) || 
-            bannedWords.includes(username.toLowerCase()) 
-        );
+        const reasons = [];
+        if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
+            reasons.push("Username must be 3-16 characters long and contain only letters, numbers, or underscores.");
+        }
+        if (bannedWords.includes(username.toLowerCase())) {
+            reasons.push("Username contains banned words.");
+        }
+        if (reasons.length > 0) {
+            username.invalidReasons = reasons;
+            return true;
+        }
+        return false;
     });
 
     if (invalidUsernames.length > 0) {
-        alert(`The following usernames are invalid:\n${invalidUsernames.join("\n")}`);
+        const message = invalidUsernames.map(username => {
+            return `${username}:\n- ${username.invalidReasons.join("\n- ")}\n`;
+        }).join("\n");
+        alert(`The following usernames are invalid:\n\n${message}`);
         return;
     }
 
