@@ -34,6 +34,7 @@
 </head>
 <body>
     <h1>Minecraft Username Checker</h1>
+    <h2>test</h2>
     <textarea id="usernames" rows="10" placeholder="Enter usernames (one per line)"></textarea><br>
     <button id="checkUsernames">Check Availability</button>
     <table id="resultsTable" style="display: none;">
@@ -48,7 +49,7 @@
     <script>
         document.getElementById('checkUsernames').addEventListener('click', async () => {
             const usernames = document.getElementById('usernames').value.split('\n')
-                .map(name => name.trim().toLowerCase())
+                .map(name => name.trim().toLowerCase()) 
                 .filter(name => name); 
 
             const resultsTable = document.getElementById('resultsTable');
@@ -71,9 +72,15 @@
                         body: JSON.stringify({ username })
                     });
 
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
                     const data = await response.json();
+                    console.log(`Response for ${username}:`, data); 
+
                     const row = document.createElement('tr');
-                    const displayName = data.username || username; 
+                    const displayName = data.username || username;
                     const status = data.status || 'Error';
 
                     row.innerHTML = `
@@ -83,6 +90,7 @@
 
                     resultsBody.appendChild(row);
                 } catch (error) {
+                    console.error(`Error for username "${username}":`, error); 
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${username}</td>
