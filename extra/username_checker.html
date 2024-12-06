@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft Username Checker</title>
     <style>
-        /* General Styling */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -28,7 +27,6 @@
             line-height: 1.5;
         }
 
-        /* Textarea and Buttons */
         textarea {
             margin: 10px;
             padding: 10px;
@@ -59,10 +57,9 @@
         }
 
         #copyButton {
-            display: none; /* Hidden initially */
+            display: none;
         }
 
-        /* Table Styling */
         table {
             margin: 20px auto;
             border-collapse: collapse;
@@ -98,13 +95,11 @@
             font-weight: bold;
         }
 
-        /* Loading Spinner */
         .loading {
             display: none;
             margin: 20px auto;
         }
 
-        /* Footer */
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -159,13 +154,13 @@ async function checkUsernames() {
     const copyButton = document.getElementById("copyButton");
 
     resultsBody.innerHTML = ""; 
-    copyButton.style.display = "none";
+    copyButton.style.display = "none"; 
     resultsTable.style.display = "none";
     loadingIndicator.style.display = "block"; 
 
     if (usernames.length === 0) {
         alert("Please enter at least one username.");
-        loadingIndicator.style.display = "none";
+        loadingIndicator.style.display = "none"; 
         return;
     }
 
@@ -239,7 +234,7 @@ async function checkUsernames() {
 
     if (availableUsernames.length > 0) {
         copyButton.style.display = "block"; 
-        copyButton.availableUsernames = availableUsernames; 
+        copyButton.availableUsernames = availableUsernames;
     }
 }
 
