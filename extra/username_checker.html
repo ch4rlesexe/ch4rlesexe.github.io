@@ -116,7 +116,6 @@
 </head>
 <body>
     <h1>Minecraft Username Availability Checker</h1>
-    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. You can also try searching fewer usernames at the same time. Also, some words may be banned by Mojang, and aren't fully accounted for here.</p>
     <p>Ensure your username meets Mojang's naming requirements: 3–16 characters, only letters, numbers, and underscores (_).</p>
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
@@ -141,7 +140,7 @@
 
     <script>
 function validateUsernames(usernames) {
-    const invalidUsernames = usernames.filter(username => {
+    const invalidUsernames = usernames.map(username => {
         const reasons = [];
         if (!/^[a-zA-Z0-9_]+$/.test(username)) {
             reasons.push("Only letters, numbers, and underscores are allowed.");
@@ -160,6 +159,10 @@ function validateUsernames(usernames) {
         return false;
     }
     return true;
+}
+
+async function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function checkUsernames() {
@@ -222,6 +225,8 @@ async function checkUsernames() {
             statusCell.textContent = error.message || "Error";
             statusCell.className = "error";
         }
+
+        await delay(500); 
     }
 
     resultsTable.style.display = "table";
