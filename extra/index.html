@@ -39,36 +39,41 @@
     <div id="result"></div>
 
     <script>
-        async function checkUsername() {
-            const username = document.getElementById("username").value.trim();
-            const resultDiv = document.getElementById("result");
+async function checkUsername() {
+    const username = document.getElementById("username").value.trim();
+    const resultDiv = document.getElementById("result");
 
-            if (!username) {
-                resultDiv.textContent = "Please enter a username.";
-                resultDiv.style.color = "orange";
-                return;
-            }
+    if (!username) {
+        resultDiv.textContent = "Please enter a username.";
+        resultDiv.style.color = "orange";
+        return;
+    }
 
-            resultDiv.textContent = "Checking...";
-            resultDiv.style.color = "#333";
+    resultDiv.textContent = "Checking...";
+    resultDiv.style.color = "#333";
 
-            try {
-                const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}`);
-                if (!response.ok) throw new Error("Failed to fetch data");
+    try {
+        const response = await fetch(`https://your-server.onrender.com/check/${username}`);
+        if (!response.ok) throw new Error("Failed to fetch data");
 
-                const data = await response.json();
-                if (data.available) {
-                    resultDiv.textContent = `The username "${username}" is available!`;
-                    resultDiv.className = "available";
-                } else {
-                    resultDiv.textContent = `The username "${username}" is unavailable.`;
-                    resultDiv.className = "unavailable";
-                }
-            } catch (error) {
-                resultDiv.textContent = "Error checking username. Please try again.";
-                resultDiv.style.color = "red";
-            }
+        const data = await response.json();
+        if (data.status === 'Unclaimed') {
+            resultDiv.textContent = `The username "${data.username}" is available!`;
+            resultDiv.style.color = "green";
+        } else if (data.status === 'Claimed') {
+            resultDiv.textContent = `The username "${data.username}" is already taken.`;
+            resultDiv.style.color = "red";
+        } else {
+            resultDiv.textContent = `Error: ${data.status}`;
+            resultDiv.style.color = "red";
         }
+    } catch (error) {
+        console.error(error); 
+        resultDiv.textContent = "Error checking username. Please try again.";
+        resultDiv.style.color = "red";
+    }
+}
+
     </script>
 </body>
 </html>
