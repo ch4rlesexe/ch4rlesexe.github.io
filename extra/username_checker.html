@@ -47,27 +47,28 @@
         document.getElementById("checkButton").addEventListener("click", async function () {
             const usernames = document.getElementById("usernameInput").value
                 .split("\n")
-                .map(u => u.trim().toLowerCase())
+                .map(u => u.trim().toLowerCase()) 
                 .filter(u => u); 
 
             const resultTable = document.getElementById("resultTable");
             const resultBody = document.getElementById("resultBody");
 
-            resultBody.innerHTML = ""; 
-            resultTable.hidden = true;
+            resultBody.innerHTML = "";
+            resultTable.hidden = true; 
 
             for (const username of usernames) {
                 const row = document.createElement("tr");
                 const usernameCell = document.createElement("td");
                 const statusCell = document.createElement("td");
 
-                usernameCell.textContent = username;
+                usernameCell.textContent = username; 
 
                 try {
                     const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}?timestamp=${Date.now()}`);
                     const data = await response.json();
 
                     if (data.status === "Claimed") {
+                        usernameCell.textContent = data.username; 
                         statusCell.textContent = "Claimed";
                         statusCell.style.color = "red";
                     } else if (data.status === "Unclaimed") {
@@ -89,7 +90,7 @@
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
 
-            resultTable.hidden = false;
+            resultTable.hidden = false; 
         });
     </script>
 </body>
