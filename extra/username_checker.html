@@ -166,8 +166,11 @@ async function checkUsernames() {
 
     const invalidUsernames = usernames.filter(username => {
         const reasons = [];
-        if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
-            reasons.push("Username must be 3-16 characters long and contain only letters, numbers, or underscores.");
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            reasons.push("Username can only contain letters, numbers, and underscores.");
+        }
+        if (username.length < 3 || username.length > 16) {
+            reasons.push("Username must be between 3 and 16 characters long.");
         }
         if (bannedWords.includes(username.toLowerCase())) {
             reasons.push("Username contains banned words.");
