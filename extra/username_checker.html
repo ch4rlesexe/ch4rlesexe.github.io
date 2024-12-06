@@ -8,9 +8,14 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
         }
-        textarea, input, button {
+        h1 {
+            color: #555;
+        }
+        textarea, button {
             margin: 10px;
             padding: 10px;
             width: 300px;
@@ -33,12 +38,21 @@
         .error {
             color: red;
         }
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+        .unavailable {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>Minecraft Username Checker</h1>
-    <textarea id="usernames" rows="10" placeholder="Enter usernames (one per line)"></textarea><br>
-    <button id="checkUsernames">Check Availability</button>
+    <p>Enter one or more Minecraft usernames below (one per line):</p>
+    <textarea id="usernames" rows="10" placeholder="Enter usernames"></textarea><br>
+    <button onclick="checkUsernames()">Check Availability</button>
     <table id="resultsTable" style="display: none;">
         <thead>
             <tr>
@@ -48,57 +62,59 @@
         </thead>
         <tbody></tbody>
     </table>
+
     <script>
-        document.getElementById('checkUsernames').addEventListener('click', async () => {
-            const usernames = document.getElementById('usernames').value
-                .split('\n')
-                .map(name => name.trim().toLowerCase()) 
-                .filter(name => name); 
+async function checkUsernames() {
+    const usernames = document.getElementById("usernames").value.split("\n")
+        .map(name => name.trim().toLowerCase())
+        .filter(name => name);
 
-            const resultsTable = document.getElementById('resultsTable');
-            const resultsBody = resultsTable.querySelector('tbody');
-            resultsBody.innerHTML = ''; 
+    const resultsTable = document.getElementById("resultsTable");
+    const resultsBody = resultsTable.querySelector("tbody");
+    resultsBody.innerHTML = ""; 
 
-            if (usernames.length === 0) {
-                alert('Please enter at least one username.');
-                return;
+    if (usernames.length === 0) {
+        alert("Please enter at least one username.");
+        return;
+    }
+
+    resultsTable.style.display = "none";
+
+    for (const username of usernames) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${username}</td>
+            <td class="error">Checking...</td>
+        `;
+        resultsBody.appendChild(row);
+
+        try {
+            const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}`);
+            if (!response.ok) throw new Error("Failed to fetch data");
+
+            const data = await response.json();
+
+            const statusCell = row.querySelector("td:nth-child(2)");
+            if (data.status === "Unclaimed") {
+                statusCell.textContent = "✅ Available";
+                statusCell.className = "available";
+            } else if (data.status === "Claimed") {
+                statusCell.textContent = "❌ Taken";
+                statusCell.className = "unavailable";
+            } else {
+                statusCell.textContent = `Error: ${data.status}`;
+                statusCell.className = "error";
             }
+        } catch (error) {
+            console.error(`Error for username "${username}":`, error);
+            const statusCell = row.querySelector("td:nth-child(2)");
+            statusCell.textContent = "Error";
+            statusCell.className = "error";
+        }
+    }
 
-            resultsTable.style.display = 'none'; 
-
-            for (const username of usernames) {
-                try {
-                    const response = await fetch(`https://your-server.onrender.com/check/${username}`);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    const row = document.createElement('tr');
-                    const displayName = data.username || username;
-                    const status = data.status || 'Error';
-
-                    row.innerHTML = `
-                        <td>${displayName}</td>
-                        <td>${status === 'Claimed' ? '❌ Taken' : '✅ Available'}</td>
-                    `;
-
-                    resultsBody.appendChild(row);
-                } catch (error) {
-                    console.error(`Error for username "${username}":`, error); 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${username}</td>
-                        <td class="error">Error</td>
-                    `;
-                    resultsBody.appendChild(row);
-                }
-            }
-
-            resultsTable.style.display = 'table'; 
-        });
+    resultsTable.style.display = "table";
+}
     </script>
 </body>
 </html>
