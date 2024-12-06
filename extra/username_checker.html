@@ -100,6 +100,13 @@
             margin: 20px auto;
         }
 
+        .error-message {
+            color: #e74c3c;
+            font-size: 16px;
+            margin-top: 20px;
+            display: none;
+        }
+
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -119,6 +126,7 @@
         <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="50">
         <p>Loading...</p>
     </div>
+    <p id="errorMessage" class="error-message">Not loading? Your username must follow Mojang naming requirements (3–16 characters length, only a-z, 0-9, _).</p>
     <table id="resultsTable" style="display: none;">
         <thead>
             <tr>
@@ -161,12 +169,14 @@ async function checkUsernames() {
     const usernames = document.getElementById("usernames").value.split("\n").map(name => name.trim()).filter(name => name);
 
     if (!validateUsernames(usernames)) {
+        document.getElementById("errorMessage").style.display = "block"; 
         return; 
     }
 
     const resultsTable = document.getElementById("resultsTable");
     const resultsBody = resultsTable.querySelector("tbody");
     const loadingIndicator = document.getElementById("loadingIndicator");
+    const errorMessage = document.getElementById("errorMessage");
     const copyButton = document.getElementById("copyButton");
     const removeAvailableButton = document.getElementById("removeAvailableButton");
     const removeUnavailableButton = document.getElementById("removeUnavailableButton");
