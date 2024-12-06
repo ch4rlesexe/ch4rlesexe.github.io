@@ -95,6 +95,9 @@ async function checkUsernames() {
             const data = await response.json();
 
             const statusCell = row.querySelector("td:nth-child(2)");
+            const displayName = data.username || username;
+            row.querySelector("td:first-child").textContent = displayName;
+
             if (data.status === "Unclaimed") {
                 statusCell.textContent = "✅ Available";
                 statusCell.className = "available";
