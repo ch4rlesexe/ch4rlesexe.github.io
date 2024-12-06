@@ -5,53 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft Username Checker</title>
     <style>
+        /* General Styling */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
-            color: #333;
-            padding: 20px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
         }
+
         h1 {
-            color: #555;
+            color: #e74c3c;
+            margin-top: 20px;
         }
-        textarea, button {
+
+        p {
+            color: #bdc3c7;
+            font-style: italic;
+            margin: 10px auto;
+            width: 60%;
+            line-height: 1.5;
+        }
+
+        /* Textarea and Button */
+        textarea {
             margin: 10px;
             padding: 10px;
-            width: 300px;
+            width: 80%;
+            max-width: 600px;
+            height: 150px;
+            border-radius: 5px;
+            border: 1px solid #34495e;
+            background-color: #34495e;
+            color: #ecf0f1;
+            font-size: 16px;
+            resize: none;
         }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Table Styling */
         table {
             margin: 20px auto;
             border-collapse: collapse;
-            width: 80%;
+            width: 90%;
+            max-width: 800px;
         }
+
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #34495e;
         }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
+
         th {
-            background-color: #f4f4f4;
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 10px;
         }
+
+        td {
+            padding: 10px;
+        }
+
         .error {
-            color: red;
+            color: #e74c3c;
         }
+
         .available {
-            color: green;
+            color: #2ecc71;
             font-weight: bold;
         }
+
         .unavailable {
-            color: red;
+            color: #e74c3c;
             font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
         }
     </style>
 </head>
 <body>
     <h1>Minecraft Username Checker</h1>
-    <p>Enter one or more Minecraft usernames below (one per line):</p>
-    <textarea id="usernames" rows="10" placeholder="Enter usernames"></textarea><br>
+    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. Also, some words may be banned by Mojang, and aren't fully accounted for here. You can also try searching less usernames at the same time.</p>
+    <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
     <table id="resultsTable" style="display: none;">
         <thead>
@@ -62,6 +116,7 @@
         </thead>
         <tbody></tbody>
     </table>
+    <footer>Powered by Minecraft Username API - Free Service</footer>
 
     <script>
 async function fetchBannedWords() {
