@@ -13,12 +13,10 @@
             margin: 0;
             padding: 0;
         }
-
         h1 {
             color: #e74c3c;
             margin-top: 20px;
         }
-
         p {
             color: #bdc3c7;
             font-style: italic;
@@ -26,7 +24,6 @@
             width: 60%;
             line-height: 1.5;
         }
-
         textarea {
             margin: 10px;
             padding: 10px;
@@ -40,7 +37,6 @@
             font-size: 16px;
             resize: none;
         }
-
         button {
             margin: 10px;
             padding: 10px 20px;
@@ -51,62 +47,50 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         button:hover {
             background-color: #c0392b;
         }
-
         #copyButton, #removeAvailableButton, #removeUnavailableButton {
             display: none;
         }
-
         table {
             margin: 20px auto;
             border-collapse: collapse;
             width: 90%;
             max-width: 800px;
         }
-
         table, th, td {
             border: 1px solid #34495e;
         }
-
         th {
             background-color: #e74c3c;
             color: #fff;
             padding: 10px;
         }
-
         td {
             padding: 10px;
         }
-
         .error {
             color: #e74c3c;
         }
-
         .available {
             color: #2ecc71;
             font-weight: bold;
         }
-
         .unavailable {
             color: #e74c3c;
             font-weight: bold;
         }
-
         .loading {
             display: none;
             margin: 20px auto;
         }
-
         .error-message {
             color: #e74c3c;
             font-size: 16px;
             margin-top: 20px;
             display: none;
         }
-
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -116,7 +100,7 @@
 </head>
 <body>
     <h1>Minecraft Username Availability Checker</h1>
-    <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. You can also try searching fewer usernames at the same time. Also, some words may be banned by Mojang, and aren't fully accounted for here.</p>
+    <p>Enter Minecraft usernames to check for availability. Usernames must be 3–16 characters long and contain only letters, numbers, or underscores (_).</p>
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
     <button id="copyButton" onclick="copyAvailableUsernames()">Copy Available Usernames</button>
@@ -126,7 +110,7 @@
         <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="50">
         <p>Loading...</p>
     </div>
-    <p id="errorMessage" class="error-message">Not loading? Your username must follow Mojang naming requirements (3–16 characters length, only a-z, 0-9, _).</p>
+    <p id="errorMessage" class="error-message">Not loading? Ensure your usernames follow Mojang's naming rules (3–16 characters, only a-z, 0-9, _).</p>
     <table id="resultsTable" style="display: none;">
         <thead>
             <tr>
@@ -139,20 +123,7 @@
     <footer>Powered by ch4rlesexe - https://github.com/ch4rlesexe/</footer>
 
     <script>
-async function fetchBannedWords() {
-    try {
-        const response = await fetch('https://www.cs.cmu.edu/~biglou/resources/bad-words.txt');
-        if (!response.ok) throw new Error("Failed to fetch banned words list.");
-        const text = await response.text();
-        return text.split('\n').map(word => word.trim().toLowerCase());
-    } catch (error) {
-        console.error("Error fetching banned words:", error);
-        return [];
-    }
-}
-
-async function validateUsernames(usernames) {
-    const bannedWords = await fetchBannedWords();
+function validateUsernames(usernames) {
     const invalidUsernames = usernames.filter(username => {
         const reasons = [];
         if (!/^[a-zA-Z0-9_]+$/.test(username)) {
@@ -160,9 +131,6 @@ async function validateUsernames(usernames) {
         }
         if (username.length < 3 || username.length > 16) {
             reasons.push("Must be between 3 and 16 characters.");
-        }
-        if (bannedWords.includes(username.toLowerCase())) {
-            reasons.push("Contains banned words.");
         }
         if (reasons.length > 0) {
             username.invalidReasons = reasons;
@@ -173,7 +141,7 @@ async function validateUsernames(usernames) {
 
     if (invalidUsernames.length > 0) {
         const message = invalidUsernames.map(username => {
-            return `${username}:\n- ${username.invalidReasons.join("\n- ")}\n`;
+            return `${username}:\n- ${username.invalidReasons.join("\n- ")}`;
         }).join("\n");
         alert(`The following usernames are invalid:\n\n${message}`);
         return false;
@@ -183,8 +151,7 @@ async function validateUsernames(usernames) {
 
 async function checkUsernames() {
     const usernames = document.getElementById("usernames").value.split("\n").map(name => name.trim()).filter(name => name);
-
-    if (!await validateUsernames(usernames)) {
+    if (!validateUsernames(usernames)) {
         document.getElementById("errorMessage").style.display = "block"; 
         return; 
     }
@@ -217,9 +184,7 @@ async function checkUsernames() {
         try {
             const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}`);
             if (!response.ok) throw new Error(`API error: ${response.status}`);
-
             const data = await response.json();
-
             const statusCell = row.querySelector("td:nth-child(2)");
             const displayName = data.username || username; 
             row.querySelector("td:first-child").textContent = displayName;
@@ -236,7 +201,6 @@ async function checkUsernames() {
                 statusCell.textContent = `Error: ${data.status}`;
                 statusCell.className = "error";
             }
-
         } catch (error) {
             console.error(`Error for username "${username}":`, error);
             const statusCell = row.querySelector("td:nth-child(2)");
@@ -267,7 +231,6 @@ function copyAvailableUsernames() {
         alert("No available usernames to copy.");
         return;
     }
-
     navigator.clipboard.writeText(availableUsernames.join("\n"))
         .then(() => alert("Available usernames copied to clipboard!"))
         .catch(err => console.error("Failed to copy usernames:", err));
