@@ -28,7 +28,7 @@
             line-height: 1.5;
         }
 
-        /* Textarea and Button */
+        /* Textarea and Buttons */
         textarea {
             margin: 10px;
             padding: 10px;
@@ -56,6 +56,10 @@
 
         button:hover {
             background-color: #c0392b;
+        }
+
+        #copyButton {
+            display: none; /* Hidden initially */
         }
 
         /* Table Styling */
@@ -94,6 +98,12 @@
             font-weight: bold;
         }
 
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            margin: 20px auto;
+        }
+
         /* Footer */
         footer {
             margin-top: 20px;
@@ -107,6 +117,11 @@
     <p>Because this resource was specifically to be used for testing, if you receive the status as 'Error' it means that the API is overloaded. The server it is run on is a free service. Also, some words may be banned by Mojang, and aren't fully accounted for here. You can also try searching fewer usernames at the same time.</p>
     <textarea id="usernames" placeholder="Enter one or more usernames (one per line)"></textarea><br>
     <button onclick="checkUsernames()">Check Availability</button>
+    <button id="copyButton" onclick="copyAvailableUsernames()">Copy Available Usernames</button>
+    <div class="loading" id="loadingIndicator">
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." width="50">
+        <p>Loading...</p>
+    </div>
     <table id="resultsTable" style="display: none;">
         <thead>
             <tr>
@@ -140,10 +155,17 @@ async function checkUsernames() {
 
     const resultsTable = document.getElementById("resultsTable");
     const resultsBody = resultsTable.querySelector("tbody");
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const copyButton = document.getElementById("copyButton");
+
     resultsBody.innerHTML = ""; 
+    copyButton.style.display = "none";
+    resultsTable.style.display = "none";
+    loadingIndicator.style.display = "block"; 
 
     if (usernames.length === 0) {
         alert("Please enter at least one username.");
+        loadingIndicator.style.display = "none";
         return;
     }
 
@@ -167,10 +189,11 @@ async function checkUsernames() {
             return `${username}:\n- ${username.invalidReasons.join("\n- ")}\n`;
         }).join("\n");
         alert(`The following usernames are invalid:\n\n${message}`);
+        loadingIndicator.style.display = "none"; 
         return;
     }
 
-    resultsTable.style.display = "none";
+    const availableUsernames = [];
 
     for (const username of usernames) {
         const row = document.createElement("tr");
@@ -193,6 +216,7 @@ async function checkUsernames() {
             if (data.status === "Unclaimed") {
                 statusCell.textContent = "✅ Available";
                 statusCell.className = "available";
+                availableUsernames.push(displayName);
             } else if (data.status === "Claimed") {
                 statusCell.textContent = "❌ Taken";
                 statusCell.className = "unavailable";
@@ -211,6 +235,24 @@ async function checkUsernames() {
     }
 
     resultsTable.style.display = "table";
+    loadingIndicator.style.display = "none"; 
+
+    if (availableUsernames.length > 0) {
+        copyButton.style.display = "block"; 
+        copyButton.availableUsernames = availableUsernames; 
+    }
+}
+
+function copyAvailableUsernames() {
+    const availableUsernames = document.getElementById("copyButton").availableUsernames || [];
+    if (availableUsernames.length === 0) {
+        alert("No available usernames to copy.");
+        return;
+    }
+
+    navigator.clipboard.writeText(availableUsernames.join("\n"))
+        .then(() => alert("Available usernames copied to clipboard!"))
+        .catch(err => console.error("Failed to copy usernames:", err));
 }
     </script>
 </body>
