@@ -49,8 +49,8 @@
             const resultTable = document.getElementById("resultTable");
             const resultBody = document.getElementById("resultBody");
 
-            resultBody.innerHTML = ""; // Clear previous results
-            resultTable.hidden = true; // Hide table initially
+            resultBody.innerHTML = "";
+            resultTable.hidden = true;
 
             for (const username of usernames) {
                 const row = document.createElement("tr");
@@ -60,15 +60,17 @@
                 usernameCell.textContent = username;
 
                 try {
-                    const response = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
-                    if (response.ok) {
+                    const response = await fetch(`https://minecraft-render-proxy.onrender.com/check/${username}`);
+                    const data = await response.json();
+
+                    if (data.status === "Claimed") {
                         statusCell.textContent = "Claimed";
                         statusCell.style.color = "red";
-                    } else if (response.status === 204) {
+                    } else if (data.status === "Unclaimed") {
                         statusCell.textContent = "Unclaimed";
                         statusCell.style.color = "green";
                     } else {
-                        statusCell.textContent = `Error: ${response.status}`;
+                        statusCell.textContent = data.status;
                         statusCell.style.color = "orange";
                     }
                 } catch (error) {
@@ -81,7 +83,7 @@
                 resultBody.appendChild(row);
             }
 
-            resultTable.hidden = false; // Show table after processing
+            resultTable.hidden = false; 
         });
     </script>
 </body>
