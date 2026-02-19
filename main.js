@@ -102,7 +102,8 @@ document.querySelectorAll('.reveal-text').forEach((el) => observer.observe(el));
 const skillObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.width = entry.target.getAttribute('data-level') + '%';
+            const level = entry.target.getAttribute('data-level') || 0;
+            entry.target.style.setProperty('--level', level + '%');
         }
     });
 }, observerOptions);
@@ -132,4 +133,23 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 });
 
-console.log("Hey, stay out of my console!")
+// Back to top button visibility
+const backToTop = document.getElementById('back-to-top');
+if (backToTop) {
+    const toggleBackToTop = () => {
+        if (window.pageYOffset > 400) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    };
+    window.addEventListener('scroll', toggleBackToTop);
+    toggleBackToTop();
+}
+
+// Use default cursor on touch devices
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.body.classList.add('touch');
+}
+
+console.log("Hey, stay out of my console!");

@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Charlie's portfolio — Tech enthusiast, cybersecurity aspirant, and game developer. Projects in web dev, security, and open source." />
   <title>Charlie's Portfolio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="cursor"></div>
@@ -18,7 +19,7 @@
   </div>
 
   <nav>
-    <div class="nav-logo">ch4rlesexe's Portfolio</div>
+    <div class="nav-logo"><span>ch4rlesexe</span> / portfolio</div>
     <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
       <span class="bar"></span>
       <span class="bar"></span>
@@ -34,14 +35,15 @@
   
   <section id="home" class="section">
     <div class="hero">
-      <h1 class="glitch" data-text="Hello World, I'm Charlie">Hello World, I'm Charlie</h1>
+      <h1 class="hero-title">Hello, I'm <span class="accent">Charlie</span></h1>
       <p class="subtitle">Tech Enthusiast, Cybersecurity Aspirant, and Game Developer</p>
     </div>
   </section>
 
   <section id="work" class="section">
-    <h2>Some of My Projects</h2>
-    <div class="projects">
+    <div class="section-inner">
+      <h2>Some of My Projects</h2>
+      <div class="projects">
       <div class="project" data-tilt data-link="https://3z0.org/">
         <div class="project-content">
           <h3>3Z0 [Open Source Blog Site]</h3>
@@ -71,74 +73,93 @@
         <div class="project-content">
           <h3>And much more coming soon...</h3>
           <p>To view all of my other open source projects, please visit my GitHub.</p>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/ch4rlesexe/" target="_blank" class="project-link">
-            <i class="fab fa-github"></i>
-          </a>
+          <div class="project-links">
+            <a href="https://github.com/ch4rlesexe/" target="_blank" class="project-link">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
   <section id="about" class="section">
-    <div class="about-content">
-      <h2>About Me</h2>
-      <p class="reveal-text">I am currently pursuing dual degrees in Computer Science & Engineering Technology and Cybersecurity, with experience in programming, game development, and backend systems. My ambition is to specialize in ethical hacking and penetration testing, helping secure digital landscapes.</p>
-      <p class="reveal-text"><br>My journey into technology has been both academically enriching and hands-on. I’ve dedicated my studies to fields such as malware analysis, ethical hacking, and web application security. Through a blend of coursework and personal projects, I’m continuously expanding my knowledge.</p>
-      <p class="reveal-text"><br>In my academic life, I focus on both foundational principles and the latest advancements in technology. I am actively working on building a solid understanding of various programming languages like Java and Python, along with web-based languages such as PHP, HTML, and JavaScript. Each step brings me closer to mastering digital defense strategies and developing cybersecurity solutions.</p>
-      <p class="reveal-text"><br>Looking ahead, I’m eager to continue exploring cybersecurity, particularly in areas like ethical hacking and threat intelligence. I aim to complete certifications such as Security+ and PenTest+ to formally validate my skills. With a commitment to lifelong learning, I’m excited to see where my curiosity and drive for innovation will take me. Ultimately, I aspire to contribute to the digital defense field, helping secure systems and protect data worldwide.</p>
-      <div class="skills">
-        <div class="skill">
-          <span class="skill-name">Cybersecurity</span>
-          <div class="skill-bar" data-level="100"></div>
-        </div>
-        <div class="skill">
-          <span class="skill-name">Software & Development</span>
-          <div class="skill-bar" data-level="80"></div>
-        </div>
-        <div class="skill">
-          <span class="skill-name">Emerging Tech</span>
-          <div class="skill-bar" data-level="65"></div>
-        </div>
-        <div class="skill">
-          <span class="skill-name">Data & AI</span>
-          <div class="skill-bar" data-level="50"></div>
+    <div class="section-inner">
+      <div class="about-content">
+        <h2>About Me</h2>
+        <p class="reveal-text">I am currently pursuing dual degrees in Computer Science & Engineering Technology and Cybersecurity, with experience in programming, game development, and backend systems. My ambition is to specialize in ethical hacking and penetration testing, helping secure digital landscapes.</p>
+        <p class="reveal-text">My journey into technology has been both academically enriching and hands-on. I’ve dedicated my studies to fields such as malware analysis, ethical hacking, and web application security. Through a blend of coursework and personal projects, I’m continuously expanding my knowledge.</p>
+        <p class="reveal-text">In my academic life, I focus on both foundational principles and the latest advancements in technology. I am actively working on building a solid understanding of various programming languages like Java and Python, along with web-based languages such as PHP, HTML, and JavaScript. Each step brings me closer to mastering digital defense strategies and developing cybersecurity solutions.</p>
+        <p class="reveal-text">Looking ahead, I’m eager to continue exploring cybersecurity, particularly in areas like ethical hacking and threat intelligence. I aim to complete certifications such as Security+ and PenTest+ to formally validate my skills. With a commitment to lifelong learning, I’m excited to see where my curiosity and drive for innovation will take me. Ultimately, I aspire to contribute to the digital defense field, helping secure systems and protect data worldwide.</p>
+        <div class="skills">
+          <div class="skill">
+            <span class="skill-name">Cybersecurity</span>
+            <div class="skill-bar" data-level="100"></div>
+          </div>
+          <div class="skill">
+            <span class="skill-name">Software & Development</span>
+            <div class="skill-bar" data-level="80"></div>
+          </div>
+          <div class="skill">
+            <span class="skill-name">Emerging Tech</span>
+            <div class="skill-bar" data-level="65"></div>
+          </div>
+          <div class="skill">
+            <span class="skill-name">Data & AI</span>
+            <div class="skill-bar" data-level="50"></div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <section id="contact" class="section">
-    <h2>Get In Touch</h2>
-    <div class="contact-content">
-      <p class="reveal-text">I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!</p>
-      <div class="contact-links">
-        <a href="mailto:corkscrew20k2@gmail.com" class="contact-link">
-          <i class="fas fa-envelope"></i>
-          <span>Email Me</span>
-        </a>
-        <a href="https://github.com/ch4rlesexe" target="_blank" class="contact-link">
-          <i class="fab fa-github"></i>
-          <span>GitHub</span>
-        </a>
-        <a href="https://www.spigotmc.org/members/corkscrew.2008400/" target="_blank" class="contact-link">
-          <i class="fab fa-stack-overflow"></i>
-          <span>Spigot</span>
-        </a>
-        <a href="https://discord.com/users/998056477493301269/" target="_blank" class="contact-link">
-          <i class= "fab fa-discord"></i>
-          <span>Discord</span>
-        </a>
+    <div class="section-inner">
+      <h2>Get In Touch</h2>
+      <div class="contact-content">
+        <p class="reveal-text">I'm always interested in hearing about new projects and opportunities. Whether you have a question or just want to say hi, feel free to reach out!</p>
+        <div class="contact-links">
+          <a href="mailto:corkscrew20k2@gmail.com" class="contact-link">
+            <i class="fas fa-envelope"></i>
+            <span>Email Me</span>
+          </a>
+          <a href="https://github.com/ch4rlesexe" target="_blank" class="contact-link">
+            <i class="fab fa-github"></i>
+            <span>GitHub</span>
+          </a>
+          <a href="https://www.spigotmc.org/members/corkscrew.2008400/" target="_blank" class="contact-link">
+            <i class="fas fa-gamepad"></i>
+            <span>Spigot</span>
+          </a>
+          <a href="https://discord.com/users/998056477493301269/" target="_blank" class="contact-link">
+            <i class="fab fa-discord"></i>
+            <span>Discord</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
+  <footer class="site-footer">
+    <p>Built by Charlie · <span id="year"></span></p>
+  </footer>
+
+  <a href="#home" class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </a>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
   <script src="main.js"></script>
   <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
     document.getElementById('hamburger').addEventListener('click', function() {
       document.getElementById('nav-links').classList.toggle('active');
+    });
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        document.getElementById('nav-links').classList.remove('active');
+      });
     });
   </script>
 </body>
